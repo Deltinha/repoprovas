@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import Draggable from 'react-draggable';
 
 export default function UploadExam({
