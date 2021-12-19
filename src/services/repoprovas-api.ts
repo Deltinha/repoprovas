@@ -24,3 +24,8 @@ export function getExamsFromProfessor(id: number) {
   const promise = axios.get(`${BASE_URL}/professors/${id}`);
   return promise;
 }
+
+export function getExamsFromClass(id: number) {
+  const promise = axios.get(`${BASE_URL}/classes/${id}`);
+  return promise;
+}
