@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getExamsFromProfessor } from '../../services/repoprovas-api';
+import {
+  getExamsFromClass,
+  getExamsFromProfessor,
+} from '../../services/repoprovas-api';
 import { useParams } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 
@@ -15,8 +18,8 @@ function Link({ href, target, children }: any) {
   );
 }
 
-export default function ProfessorExams() {
-  const professorId = Number(useParams().id);
+export default function ClassExams() {
+  const classId = Number(useParams().id);
   const [exams, setExams]: any[] = useState([]);
 
   function groupByTypes(array: any) {
@@ -28,9 +31,7 @@ export default function ProfessorExams() {
   }
 
   useEffect(() => {
-    getExamsFromProfessor(professorId).then((res) =>
-      setExams(groupByTypes(res.data))
-    );
+    getExamsFromClass(classId).then((res) => setExams(groupByTypes(res.data)));
   }, []);
 
   return (
@@ -45,7 +46,7 @@ export default function ProfessorExams() {
                 href={exam.link}
                 target="_blank"
                 as={Link}
-              >{`${exam.class} - ${exam.name}`}</Accordion.Body>
+              >{`${exam.name} - ${exam.professor}`}</Accordion.Body>
             ))}
           </Accordion.Item>
         ))}
