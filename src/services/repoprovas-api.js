@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const BASE_URL =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:4000' : '';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4000'
+    : 'https://repoprovas-deltinha.herokuapp.com/';
 
 export function postUpload(body) {
   const promise = axios.post(`${BASE_URL}/upload`, body);
