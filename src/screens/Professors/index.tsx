@@ -10,7 +10,6 @@ export default function Professors() {
   useEffect(() => {
     getProfessors().then((res) => setProfessors(res.data));
   }, []);
-  console.log(professors);
 
   return (
     <ListGroup style={{ width: '300px' }}>

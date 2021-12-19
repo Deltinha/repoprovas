@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import Classes from './screens/Classes';
 import ProfessorExams from './screens/ProfessorExams';
 import Professors from './screens/Professors';
 import UploadExam from './screens/UploadExam';
@@ -11,6 +12,7 @@ export default function AppRoutes() {
         <Route path="/upload" element={<UploadExam />} />
         <Route path="/professors" element={<Professors />} />
         <Route path="/professors/:id" element={<ProfessorExams />} />
+        <Route path="/classes" element={<Classes />} />
       </Routes>
     </>
   );

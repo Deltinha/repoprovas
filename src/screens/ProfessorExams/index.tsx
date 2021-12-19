@@ -16,7 +16,6 @@ function Link({ href, target, children }: any) {
 }
 
 export default function ProfessorExams() {
-  // const navigate = useNavigate();
   const professorId = Number(useParams().id);
   const [exams, setExams]: any[] = useState([]);
 
