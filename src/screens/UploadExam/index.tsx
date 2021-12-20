@@ -1,15 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import * as S from './style';
-import Window from '../../components/Window';
-import { useEffect, useState } from 'react';
-import { getClasses, getProfessors } from '../../services/repoprovas-api';
+import { FormEvent, useEffect, useState } from 'react';
+import {
+  getClasses,
+  getExamTypes,
+  getProfessors,
+  postExam,
+} from '../../services/repoprovas-api';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { UploadSchema } from './validation';
+import { AlertModal } from '../../components/AlertModal';
+import { useNavigate } from 'react-router-dom';
 
 export default function UploadExam() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [types, setTypes] = useState([]);
+
+  const [types, setTypes]: any[] = useState([]);
+  const [selectedType, setSelectedType]: any[] = useState({});
+
   const [allProfessors, setAllProfessors] = useState([]);
   const [filteredProfessors, setFilteredProfessors] = useState([]);
-  const [classes, setClasses] = useState([]);
+  const [selectedProfessor, setSelectedProfessor]: any[] = useState({});
+
+  const [allClasses, setAllClasses] = useState([]);
+  const [selectedClass, setSelectedClass]: any[] = useState({});
+
   const [link, setLink] = useState('');
 
   useEffect(() => {
@@ -17,62 +32,168 @@ export default function UploadExam() {
       setAllProfessors(res.data);
       setFilteredProfessors(res.data);
     });
-    getClasses().then((res) => setClasses(res.data));
+
+    getClasses().then((res) => {
+      setAllClasses(res.data);
+    });
+
+    getExamTypes().then((res) => setTypes(res.data));
   }, []);
 
-  function updateProfessors(e: any) {
-    const classId = parseInt(e.target.value, 10);
+  function selectClass(e: any) {
+    const classId = Number(e.target.value);
+
     if (!classId) {
       setFilteredProfessors([...allProfessors]);
+      setSelectedClass({});
     } else {
-      setFilteredProfessors(
-        allProfessors.filter(
-          (professor: any) =>
-            professor.classToProfessors.some(
-              (_class: any) => _class.classId === classId
-            ) === true
-        )
+      const _class: any = allClasses.find(
+        (_class: any) => _class.id === classId
       );
+
+      setSelectedClass(_class);
+      setFilteredProfessors(_class.professors);
+      if (
+        !_class.professors.some(
+          (professor: any) => professor.id === selectedProfessor.id
+        )
+      ) {
+        setSelectedProfessor(_class.professors[0]);
+      }
     }
   }
 
+  function selectType(e: any) {
+    const typeId = Number(e.target.value);
+
+    if (!typeId) {
+      setSelectedType({});
+    } else {
+      const type = types.find((type: any) => type.id === typeId);
+
+      setSelectedType(type);
+    }
+  }
+
+  function selectProfessor(e: any) {
+    const professorId = Number(e.target.value);
+
+    if (!professorId) {
+      setSelectedProfessor({});
+    } else {
+      const professor = allProfessors.find(
+        (professor: any) => professor.id === professorId
+      );
+
+      setSelectedProfessor(professor);
+    }
+  }
+
+  function submitForm(e: FormEvent) {
+    e.preventDefault();
+    const body = {
+      name,
+      classId: selectedClass.id,
+      professorId: selectedProfessor.id,
+      typeId: selectedType.id,
+      link,
+    };
+
+    UploadSchema.validate(body)
+      .then((isValid) => {
+        if (isValid) {
+          postExam(body)
+            .then((res) => {
+              AlertModal.fire({
+                title: 'Prova enviada com sucesso',
+                timer: 3000,
+                timerProgressBar: true,
+                icon: 'success',
+              }).then(() => {
+                navigate('/');
+              });
+            })
+            .catch((err) => {
+              AlertModal.fire({
+                title: err.response?.data,
+                showCancelButton: true,
+                showConfirmButton: false,
+                cancelButtonText: 'Ok',
+                icon: 'error',
+                timer: 3000,
+                timerProgressBar: true,
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        const errorMessage = err.errors[0];
+        AlertModal.fire({
+          title: errorMessage,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: 'info',
+        });
+      });
+  }
+
   return (
-    <S.UploadExam>
-      <Window title="Enviar prova">
-        <form>
-          <label htmlFor="name">Nome da prova</label>
-          <input id="name" type="text" placeholder="Ex: 2020.1" />
+    <Form onSubmit={submitForm}>
+      <Form.Group className="mb-3" controlId="formExamName">
+        <Form.Label>Nome da prova</Form.Label>
+        <Form.Control
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+          placeholder="Ex: 2020.1"
+        />
+      </Form.Group>
 
-          <label htmlFor="types">Tipo de prova</label>
-          <select name="types" id="types">
-            <option value="volvo">P1</option>
-            <option value="saab">P2</option>
-            <option value="mercedes">P3</option>
-            <option value="audi">Final</option>
-          </select>
+      <Form.Group className="mb-3" controlId="formType">
+        <Form.Label>Tipo de prova</Form.Label>
+        <Form.Select value={selectedType.id} onChange={selectType}>
+          <option>Selecione o tipo da prova</option>
+          {types.map((type: any) => (
+            <option value={type.id}>{type.name}</option>
+          ))}
+        </Form.Select>
+      </Form.Group>
 
-          <label htmlFor="classes">Disciplina</label>
-          <select onChange={updateProfessors} name="classes" id="classes">
-            <option></option>
-            {classes.map((_class: any) => (
+      <div className="d-flex gap-5 mb-3">
+        <Form.Group className="" controlId="formClass">
+          <Form.Label>Disciplina</Form.Label>
+          <Form.Select value={selectedClass.id} onChange={selectClass}>
+            <option>Selecione a disciplina da prova</option>
+            {allClasses.map((_class: any, index) => (
               <option value={_class.id}>{_class.name}</option>
             ))}
-          </select>
+          </Form.Select>
+        </Form.Group>
 
-          <label htmlFor="professors">Professor</label>
-          <select name="professors" id="professors">
-            <option></option>
+        <Form.Group className="" controlId="formProfessor">
+          <Form.Label>Professor</Form.Label>
+          <Form.Select value={selectedProfessor.id} onChange={selectProfessor}>
+            <option>Selecione o professor que aplicou</option>
             {filteredProfessors.map((prof: any) => (
-              <option value={prof.name}>{prof.name}</option>
+              <option value={prof.id}>{prof.name}</option>
             ))}
-          </select>
+          </Form.Select>
+        </Form.Group>
+      </div>
 
-          <label htmlFor="link">Endereço do PDF</label>
-          <input id="link" type="text" placeholder="" />
+      <Form.Group className="mb-3" controlId="formPdfLink">
+        <Form.Label>Endereço do PDF</Form.Label>
+        <Form.Control
+          value={link}
+          type="text"
+          placeholder="Apenas HTTPS"
+          onChange={(e) => setLink(e.target.value)}
+        />
+      </Form.Group>
 
-          <input type="button" value="Enviar prova" />
-        </form>
-      </Window>
-    </S.UploadExam>
+      <Button variant="primary" type="submit">
+        Enviar prova
+      </Button>
+    </Form>
   );
 }
