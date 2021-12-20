@@ -20,7 +20,7 @@ export default function Classes() {
   }
 
   return (
-    <>
+    <div className="p-5 d-flex flex-column gap-4">
       {Object.keys(classes)
         .sort()
         .map((year, index) => (
@@ -37,6 +37,6 @@ export default function Classes() {
             ))}
           </ListGroup>
         ))}
-    </>
+    </div>
   );
 }
