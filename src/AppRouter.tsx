@@ -8,16 +8,13 @@ import UploadExam from './screens/UploadExam';
 
 export default function AppRouter() {
   return (
-    <>
-      {/* <Header /> */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/upload" element={<UploadExam />} />
-        <Route path="/professors" element={<Professors />} />
-        <Route path="/professors/:id" element={<ProfessorExams />} />
-        <Route path="/classes" element={<Classes />} />
-        <Route path="/classes/:id" element={<ClassExams />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/upload" element={<UploadExam />} />
+      <Route path="/professors" element={<Professors />} />
+      <Route path="/professors/:id" element={<ProfessorExams />} />
+      <Route path="/classes" element={<Classes />} />
+      <Route path="/classes/:id" element={<ClassExams />} />
+    </Routes>
   );
 }

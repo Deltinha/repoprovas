@@ -1,12 +1,11 @@
 import Buttom from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-import Image from 'react-bootstrap/Image';
 
 export default function Home() {
   const navigate = useNavigate();
   return (
     <div
-      className="p-5 flex-column gap-3"
+      className="m-5 flex-column gap-3"
       style={{ width: '800px', alignItems: 'center', justifyContent: 'center' }}
     >
       <h1 className="cover-heading text-center">D🤫ssiê</h1>
