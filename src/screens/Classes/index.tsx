@@ -22,7 +22,7 @@ export default function Classes() {
   console.log(classes);
 
   return (
-    <div className="p-5 d-flex flex-column gap-4">
+    <div className="m-5 d-flex flex-column gap-4">
       {Object.keys(classes)
         .sort()
         .map((year, index) => (

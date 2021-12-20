@@ -138,7 +138,7 @@ export default function UploadExam() {
   }
 
   return (
-    <Form onSubmit={submitForm}>
+    <Form onSubmit={submitForm} className="m-5">
       <Form.Group className="mb-3" controlId="formExamName">
         <Form.Label>Nome da prova</Form.Label>
         <Form.Control

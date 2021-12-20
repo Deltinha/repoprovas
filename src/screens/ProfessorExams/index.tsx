@@ -34,7 +34,7 @@ export default function ProfessorExams() {
   }, []);
 
   return (
-    <Accordion style={{ width: '300px' }}>
+    <Accordion style={{ width: '300px' }} className="m-5">
       {Object.keys(exams)
         .sort()
         .map((type, index) => (

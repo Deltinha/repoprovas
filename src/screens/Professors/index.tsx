@@ -12,7 +12,7 @@ export default function Professors() {
   }, []);
 
   return (
-    <ListGroup style={{ width: '300px' }}>
+    <ListGroup style={{ width: '300px' }} className="m-5">
       {professors.map((professor: any) => (
         <ListGroup.Item
           action
