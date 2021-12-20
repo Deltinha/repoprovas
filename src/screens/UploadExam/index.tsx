@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import {
   getClasses,
   getExamTypes,
@@ -10,19 +10,23 @@ import Button from 'react-bootstrap/Button';
 import { UploadSchema } from './validation';
 import { AlertModal } from '../../components/AlertModal';
 import { useNavigate } from 'react-router-dom';
+import { ExamType } from '../../interfaces/ExamType';
+import { Professor } from '../../interfaces/Professor';
+import { Class } from '../../interfaces/Class';
+import { Exam } from '../../interfaces/Exam';
 
 export default function UploadExam() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
 
-  const [types, setTypes]: any[] = useState([]);
+  const [types, setTypes] = useState<ExamType[]>([]);
   const [selectedType, setSelectedType]: any[] = useState({});
 
-  const [allProfessors, setAllProfessors] = useState([]);
-  const [filteredProfessors, setFilteredProfessors] = useState([]);
+  const [allProfessors, setAllProfessors] = useState<Professor[]>([]);
+  const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>([]);
   const [selectedProfessor, setSelectedProfessor]: any[] = useState({});
 
-  const [allClasses, setAllClasses] = useState([]);
+  const [allClasses, setAllClasses] = useState<Class[]>([]);
   const [selectedClass, setSelectedClass]: any[] = useState({});
 
   const [link, setLink] = useState('');
@@ -40,22 +44,20 @@ export default function UploadExam() {
     getExamTypes().then((res) => setTypes(res.data));
   }, []);
 
-  function selectClass(e: any) {
-    const classId = Number(e.target.value);
+  function selectClass(e: ChangeEvent) {
+    const classId = Number((e.target as HTMLTextAreaElement).value);
 
     if (!classId) {
       setFilteredProfessors([...allProfessors]);
       setSelectedClass({});
     } else {
-      const _class: any = allClasses.find(
-        (_class: any) => _class.id === classId
-      );
+      const _class: any = allClasses.find((_class) => _class.id === classId);
 
       setSelectedClass(_class);
       setFilteredProfessors(_class.professors);
       if (
         !_class.professors.some(
-          (professor: any) => professor.id === selectedProfessor.id
+          (professor: Professor) => professor.id === selectedProfessor.id
         )
       ) {
         setSelectedProfessor(_class.professors[0]);
@@ -63,26 +65,26 @@ export default function UploadExam() {
     }
   }
 
-  function selectType(e: any) {
-    const typeId = Number(e.target.value);
+  function selectType(e: ChangeEvent) {
+    const typeId = Number((e.target as HTMLTextAreaElement).value);
 
     if (!typeId) {
       setSelectedType({});
     } else {
-      const type = types.find((type: any) => type.id === typeId);
+      const type = types.find((type) => type.id === typeId);
 
       setSelectedType(type);
     }
   }
 
-  function selectProfessor(e: any) {
-    const professorId = Number(e.target.value);
+  function selectProfessor(e: ChangeEvent) {
+    const professorId = Number((e.target as HTMLTextAreaElement).value);
 
     if (!professorId) {
       setSelectedProfessor({});
     } else {
       const professor = allProfessors.find(
-        (professor: any) => professor.id === professorId
+        (professor) => professor.id === professorId
       );
 
       setSelectedProfessor(professor);
@@ -91,7 +93,7 @@ export default function UploadExam() {
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
-    const body = {
+    const body: Exam = {
       name,
       classId: selectedClass.id,
       professorId: selectedProfessor.id,
@@ -153,8 +155,8 @@ export default function UploadExam() {
         <Form.Label>Tipo de prova</Form.Label>
         <Form.Select value={selectedType.id} onChange={selectType}>
           <option>Selecione o tipo da prova</option>
-          {types.map((type: any) => (
-            <option value={type.id}>{type.name}</option>
+          {types.map((type) => (
+            <option value={Number(type.id)}>{type.name}</option>
           ))}
         </Form.Select>
       </Form.Group>
@@ -164,8 +166,8 @@ export default function UploadExam() {
           <Form.Label>Disciplina</Form.Label>
           <Form.Select value={selectedClass.id} onChange={selectClass}>
             <option>Selecione a disciplina da prova</option>
-            {allClasses.map((_class: any, index) => (
-              <option value={_class.id}>{_class.name}</option>
+            {allClasses.map((_class) => (
+              <option value={Number(_class.id)}>{_class.name}</option>
             ))}
           </Form.Select>
         </Form.Group>
@@ -174,8 +176,8 @@ export default function UploadExam() {
           <Form.Label>Professor</Form.Label>
           <Form.Select value={selectedProfessor.id} onChange={selectProfessor}>
             <option>Selecione o professor que aplicou</option>
-            {filteredProfessors.map((prof: any) => (
-              <option value={prof.id}>{prof.name}</option>
+            {filteredProfessors.map((prof) => (
+              <option value={Number(prof.id)}>{prof.name}</option>
             ))}
           </Form.Select>
         </Form.Group>
