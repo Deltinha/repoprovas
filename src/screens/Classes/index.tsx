@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Badge from 'react-bootstrap/Badge';
 import { useNavigate } from 'react-router-dom';
 import { getClasses } from '../../services/repoprovas-api';
 
@@ -18,6 +19,7 @@ export default function Classes() {
       return objectsByKeyValue;
     }, {});
   }
+  console.log(classes);
 
   return (
     <div className="p-5 d-flex flex-column gap-4">
@@ -31,8 +33,14 @@ export default function Classes() {
                 key={_class.id}
                 action
                 onClick={() => navigate(`/classes/${_class.id}`)}
+                className="d-flex justify-content-between"
               >
-                {_class.name}
+                <div className="ms-2 me-auto">
+                  <div className="fw-bold">{_class.name}</div>
+                </div>
+                <Badge pill>
+                  {_class.exams.length > 0 && _class.exams.length}
+                </Badge>
               </ListGroup.Item>
             ))}
           </ListGroup>
