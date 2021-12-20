@@ -5,8 +5,8 @@ const BASE_URL =
     ? 'http://localhost:4000'
     : 'https://repoprovas-deltinha.herokuapp.com';
 
-export function postUpload(body: any) {
-  const promise = axios.post(`${BASE_URL}/upload`, body);
+export function postExam(body: any) {
+  const promise = axios.post(`${BASE_URL}/exams`, body);
   return promise;
 }
 
@@ -27,5 +27,10 @@ export function getExamsFromProfessor(id: number) {
 
 export function getExamsFromClass(id: number) {
   const promise = axios.get(`${BASE_URL}/classes/${id}`);
+  return promise;
+}
+
+export function getExamTypes() {
+  const promise = axios.get(`${BASE_URL}/exams/types`);
   return promise;
 }

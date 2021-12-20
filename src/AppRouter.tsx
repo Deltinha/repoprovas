@@ -5,7 +5,7 @@ import ProfessorExams from './screens/ProfessorExams';
 import Professors from './screens/Professors';
 import UploadExam from './screens/UploadExam';
 
-export default function AppRoutes() {
+export default function AppRouter() {
   return (
     <>
       {/* <Header /> */}

@@ -1,6 +1,4 @@
-import { DefaultTheme } from 'styled-components';
-
-export const theme: DefaultTheme = {
+export const theme = {
   base: '#191724',
   surface: '#1f1d2e',
   overlay: '#26233a',
