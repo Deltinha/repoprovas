@@ -3,6 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useNavigate } from 'react-router-dom';
 import { getClasses } from '../../services/repoprovas-api';
+import { Class } from '../../interfaces/Class';
 
 export default function Classes() {
   const [classes, setClasses]: any[] = useState([]);
@@ -12,7 +13,7 @@ export default function Classes() {
     getClasses().then((res) => setClasses(groupByYear(res.data)));
   }, []);
 
-  function groupByYear(array: any) {
+  function groupByYear(array: Class[]) {
     return array.reduce((objectsByKeyValue: any, obj: any) => {
       const value = obj['year'];
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getExamsFromProfessor } from '../../services/repoprovas-api';
 import { useParams } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
+import { Exam } from '../../interfaces/Exam';
 
 function Link({ href, target, children }: any) {
   return (
@@ -19,7 +20,7 @@ export default function ProfessorExams() {
   const professorId = Number(useParams().id);
   const [exams, setExams]: any[] = useState([]);
 
-  function groupByTypes(array: any) {
+  function groupByTypes(array: Exam[]) {
     return array.reduce((objectsByKeyValue: any, obj: any) => {
       const value = obj['type'];
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
@@ -28,9 +29,9 @@ export default function ProfessorExams() {
   }
 
   useEffect(() => {
-    getExamsFromProfessor(professorId).then((res) =>
-      setExams(groupByTypes(res.data))
-    );
+    getExamsFromProfessor(professorId).then((res) => {
+      setExams(groupByTypes(res.data));
+    });
   }, []);
 
   return (

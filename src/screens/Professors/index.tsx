@@ -3,17 +3,18 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { getProfessors } from '../../services/repoprovas-api';
 import { useNavigate } from 'react-router-dom';
+import { Professor } from '../../interfaces/Professor';
 
 export default function Professors() {
   const navigate = useNavigate();
-  const [professors, setProfessors] = useState([]);
+  const [professors, setProfessors] = useState<Professor[]>([]);
   useEffect(() => {
     getProfessors().then((res) => setProfessors(res.data));
   }, []);
 
   return (
     <ListGroup style={{ width: '300px' }} className="m-5">
-      {professors.map((professor: any) => (
+      {professors.map((professor) => (
         <ListGroup.Item
           action
           onClick={() => navigate(`/professors/${professor.id}`)}
