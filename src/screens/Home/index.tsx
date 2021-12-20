@@ -12,7 +12,7 @@ export default function Home() {
       <h1 className="cover-heading text-center">D🤫ssiê</h1>
 
       <p className="lead text-center">
-        Aqui você encontra provas passadas de todas as diciplinas do nosso curso
+        Provas passadas de todas as diciplinas do nosso curso
       </p>
 
       <div className="lead d-flex gap-5 justify-content-center mb-5">
