@@ -22,7 +22,7 @@ export default function Professors() {
           <div className="ms-2 me-auto">
             <div className="fw-bold">{professor.name}</div>
           </div>
-          <Badge pill>{professor.examsQty}</Badge>
+          <Badge pill>{professor.examsQty > 0 && professor.examsQty}</Badge>
         </ListGroup.Item>
       ))}
     </ListGroup>
