@@ -4,9 +4,11 @@ import AppRouter from './AppRouter';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRouter />
-    </BrowserRouter>
+    <div className="d-flex w-100 h-100 justify-content-center">
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </div>
   );
 }
 
